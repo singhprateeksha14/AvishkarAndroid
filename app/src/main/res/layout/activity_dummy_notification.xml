@@ -6,8 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.prateekshasingh.myapplication.DummyNotificationActivity">
@@ -54,7 +54,7 @@
         android:layout_below="@+id/locationEditText"
         android:layout_centerHorizontal="true" />
 
-    <EditText
+    <TextView
         android:id="@+id/nameEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -63,9 +63,10 @@
         android:layout_alignStart="@+id/emailEditText"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="" />
+        android:text="Jack Sparrow"
+        android:layout_alignParentEnd="true" />
 
-    <EditText
+    <TextView
         android:id="@+id/emailEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -73,9 +74,11 @@
         android:layout_alignBottom="@+id/emailTextView"
         android:layout_alignStart="@+id/phoneEditText"
         android:ems="10"
-        android:inputType="textEmailAddress" />
+        android:inputType="textEmailAddress"
+        android:text="pratsona@gmail.com"
+        android:layout_alignParentEnd="true" />
 
-    <EditText
+    <TextView
         android:id="@+id/phoneEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -85,7 +88,8 @@
         android:layout_marginLeft="13dp"
         android:layout_marginStart="29dp"
         android:ems="10"
-        android:inputType="phone" />
+        android:inputType="phone"
+        android:text="9975794996"/>
 
     <TextView
         android:id="@+id/notesTextView"
@@ -96,7 +100,7 @@
         android:layout_below="@+id/phoneEditText"
         android:layout_alignStart="@+id/phoneTextView" />
 
-    <EditText
+    <TextView
         android:id="@+id/notesEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -104,7 +108,9 @@
         android:layout_alignBottom="@+id/notesTextView"
         android:layout_alignStart="@+id/phoneEditText"
         android:ems="10"
-        android:inputType="text" />
+        android:inputType="text"
+        android:text="Discussion on Mutual Funds SIP"
+        android:layout_alignParentEnd="true" />
 
     <TextView
         android:id="@+id/locationTextView"
@@ -124,5 +130,24 @@
         android:layout_alignStart="@+id/notesEditText"
         android:ems="10"
         android:inputType="text" />
+
+    <Button
+        android:id="@+id/callButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/locationTextView"
+        android:layout_marginBottom="21dp"
+        android:layout_marginStart="17dp"
+        android:text="Call Client" />
+
+    <Button
+        android:id="@+id/emailButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/locationEditText"
+        android:layout_alignTop="@+id/callButton"
+        android:layout_marginEnd="31dp"
+        android:text="Send Email" />
 
 </RelativeLayout>

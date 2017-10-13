@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "500994059777",
+    "firebase_url": "https://aavishkar-8c6ec.firebaseio.com",
+    "project_id": "aavishkar-8c6ec",
+    "storage_bucket": "aavishkar-8c6ec.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:500994059777:android:3a84a37f5c785fca",
+        "android_client_info": {
+          "package_name": "notification.avishkar.com.pushnotification"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "500994059777-h8u3l1gb7336e84kh2kuemftsm8adss3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCIib3GCFJZAHfzgQzv1O10bvMSlsNInoE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
