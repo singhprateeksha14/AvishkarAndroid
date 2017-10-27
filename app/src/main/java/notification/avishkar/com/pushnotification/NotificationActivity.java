@@ -1,4 +1,4 @@
-package com.example.prateekshasingh.myapplication;
+package notification.avishkar.com.pushnotification;
 
 import android.Manifest;
 import android.app.DatePickerDialog;
@@ -24,7 +24,7 @@ import android.widget.Toast;
 
 import java.util.TimeZone;
 
-public class DummyNotificationActivity extends AppCompatActivity {
+public class NotificationActivity extends AppCompatActivity {
 
     Button calendarInviteButton, callButton, emailButton;
     EditText  locationEdit;
@@ -61,7 +61,7 @@ public class DummyNotificationActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                new DatePickerDialog(DummyNotificationActivity.this, date, myCalendar
+                new DatePickerDialog(NotificationActivity.this, date, myCalendar
                         .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                         myCalendar.get(Calendar.DAY_OF_MONTH)).show();
             }
@@ -92,9 +92,9 @@ public class DummyNotificationActivity extends AppCompatActivity {
                         valuesCalendarInsertEvent.put(CalendarContract.Events.ALL_DAY, 0);
                         valuesCalendarInsertEvent.put(CalendarContract.Events.CALENDAR_ID, 3);
                         // calendarIdExample();
-                        if (ContextCompat.checkSelfPermission(DummyNotificationActivity.this, Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
+                        if (ContextCompat.checkSelfPermission(NotificationActivity.this, Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
                             // Toast.makeText(getApplicationContext(), "NOooooo Invite Sent", Toast.LENGTH_SHORT).show();
-                            ActivityCompat.requestPermissions(DummyNotificationActivity.this,
+                            ActivityCompat.requestPermissions(NotificationActivity.this,
                                     new String[]{Manifest.permission.WRITE_CALENDAR},
                                     MY_PERMISSIONS_REQUEST_WRITE_CALENDAR_EVENT);
                         } else {
@@ -126,9 +126,9 @@ public class DummyNotificationActivity extends AppCompatActivity {
         callButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                // Toast.makeText(getApplicationContext(), "on click", Toast.LENGTH_SHORT).show();
-                if (ContextCompat.checkSelfPermission(DummyNotificationActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                if (ContextCompat.checkSelfPermission(NotificationActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
                    // Toast.makeText(getApplicationContext(), "no permission", Toast.LENGTH_SHORT).show();
-                    ActivityCompat.requestPermissions(DummyNotificationActivity.this,
+                    ActivityCompat.requestPermissions(NotificationActivity.this,
                             new String[]{Manifest.permission.CALL_PHONE},
                             MY_PERMISSIONS_REQUEST_CALL_PHONE);
                     // return;
@@ -211,10 +211,10 @@ public class DummyNotificationActivity extends AppCompatActivity {
         valuesCalendarInsertAttendees.put(CalendarContract.Attendees.ATTENDEE_TYPE, CalendarContract.Attendees.TYPE_REQUIRED);
         valuesCalendarInsertAttendees.put(CalendarContract.Attendees.ATTENDEE_STATUS, CalendarContract.Attendees.ATTENDEE_STATUS_INVITED);
         valuesCalendarInsertAttendees.put(CalendarContract.Attendees.EVENT_ID, eventId);
-        if (ContextCompat.checkSelfPermission(DummyNotificationActivity.this, Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(NotificationActivity.this, Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
             //Toast.makeText(getApplicationContext(), "no permission", Toast.LENGTH_SHORT).show();
             //return;
-            ActivityCompat.requestPermissions(DummyNotificationActivity.this,
+            ActivityCompat.requestPermissions(NotificationActivity.this,
                     new String[]{Manifest.permission.READ_CONTACTS},
                     MY_PERMISSIONS_REQUEST_WRITE_CALENDAR_ATTENDEES);
         } else {
@@ -237,7 +237,7 @@ public class DummyNotificationActivity extends AppCompatActivity {
                     // Toast.makeText(getApplicationContext(), "yayy", Toast.LENGTH_SHORT).show();
                     // permission was granted, yay! Do the
                     // contacts-related task you need to do.
-                    if (ContextCompat.checkSelfPermission(DummyNotificationActivity.this, Manifest.permission.WRITE_CALENDAR) == PackageManager.PERMISSION_GRANTED) {
+                    if (ContextCompat.checkSelfPermission(NotificationActivity.this, Manifest.permission.WRITE_CALENDAR) == PackageManager.PERMISSION_GRANTED) {
                         uriCalendarInsertAttendees = cr.insert(CalendarContract.Attendees.CONTENT_URI, valuesCalendarInsertAttendees);
                     }
 
@@ -255,7 +255,7 @@ public class DummyNotificationActivity extends AppCompatActivity {
                     // Toast.makeText(getApplicationContext(), "yayy", Toast.LENGTH_SHORT).show();
                     // permission was granted, yay! Do the
                     // contacts-related task you need to do.
-                    if (ContextCompat.checkSelfPermission(DummyNotificationActivity.this, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+                    if (ContextCompat.checkSelfPermission(NotificationActivity.this, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
                         // Toast.makeText(getApplicationContext(), "have permission", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(Intent.ACTION_CALL);
 
@@ -277,7 +277,7 @@ public class DummyNotificationActivity extends AppCompatActivity {
                     // Toast.makeText(getApplicationContext(), "yayy", Toast.LENGTH_SHORT).show();
                     // permission was granted, yay! Do the
                     // contacts-related task you need to do.
-                    if (ContextCompat.checkSelfPermission(DummyNotificationActivity.this, Manifest.permission.WRITE_CALENDAR) == PackageManager.PERMISSION_GRANTED) {
+                    if (ContextCompat.checkSelfPermission(NotificationActivity.this, Manifest.permission.WRITE_CALENDAR) == PackageManager.PERMISSION_GRANTED) {
                         uriCalendarInsertEvent = cr.insert(CalendarContract.Events.CONTENT_URI, valuesCalendarInsertEvent);
                         long eventID = Long.parseLong(uriCalendarInsertEvent.getLastPathSegment());
                         addAttendees(eventID);

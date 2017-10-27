@@ -1,4 +1,4 @@
-package com.example.prateekshasingh.myapplication;
+package notification.avishkar.com.pushnotification;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

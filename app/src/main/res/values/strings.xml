@@ -3,4 +3,7 @@
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_listview">ListviewActivity</string>
     <string name="title_activity_notification_list">NotificationListActivity</string>
+    <string name="MyCalendar">My Calendar</string>
+    <string name="Home">Home</string>
+    <string name="KeyBusinessTools">Key Business Tools</string>
 </resources>
