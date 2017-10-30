@@ -36,11 +36,9 @@
         android:id="@+id/phoneTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/emailTextView"
         android:layout_alignStart="@+id/emailTextView"
         android:layout_below="@+id/emailTextView"
-        android:layout_marginTop="35dp"
-        android:layout_toLeftOf="@+id/nameEditText"
+        android:layout_marginTop="24dp"
         android:text="Phone:" />
 
     <Button
@@ -80,9 +78,9 @@
         android:id="@+id/phoneEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/phoneTextView"
         android:layout_alignBottom="@+id/phoneTextView"
         android:layout_alignEnd="@+id/createEventButton"
-        android:layout_marginBottom="11dp"
         android:ems="10"
         android:inputType="phone"
         android:text="9975794996" />
