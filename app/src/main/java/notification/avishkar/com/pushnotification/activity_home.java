@@ -35,7 +35,7 @@ public class activity_home extends AppCompatActivity {
     ListView home_Listview;
     DatabaseHelper mydb;
     String title, message, insured, email, phone, policy_num, amount, notes, currency, due_date;
-    String[] titles_str = {"My Notifications", "My Calendar", "Key Business Tools", "My Favorites", "Principal Blogs", "Principal News"};
+    String[] titles_str = {"My Notifications        	>", "My Calendar        	 	>", "Key Business Tools      	>", "My Favorites            	>", "Principal Blogs 	 	>", "Principal News      		>"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

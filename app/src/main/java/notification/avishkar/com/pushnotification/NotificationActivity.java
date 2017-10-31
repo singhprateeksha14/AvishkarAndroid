@@ -7,6 +7,7 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.icu.util.Calendar;
 import android.net.Uri;
 import android.os.Bundle;
@@ -38,6 +39,7 @@ public class NotificationActivity extends AppCompatActivity {
     final int MY_PERMISSIONS_REQUEST_WRITE_CALENDAR_EVENT = 1;
     final int MY_PERMISSIONS_REQUEST_WRITE_CALENDAR_ATTENDEES = 2;
     final int MY_PERMISSIONS_REQUEST_CALL_PHONE = 3;
+    DatabaseHelper mydb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -295,6 +297,37 @@ public class NotificationActivity extends AppCompatActivity {
             // other 'case' lines to check for other
             // permissions this app might request
         }
+    }
+
+    public void viewAll()
+    {
+        Cursor res = mydb.getAllData();
+        StringBuffer buffer = new StringBuffer();
+        String title_str = null;
+        String subtitle_str =null;
+        int i=0;
+        while (res.moveToNext())
+        {
+            buffer.append("ID: "+ res.getInt(0)+"\n");
+            buffer.append("title: "+ res.getString(1)+"\n");
+            title_str= res.getString(1);
+            buffer.append("message: "+ res.getString(2)+"\n");
+            subtitle_str= res.getString(2);
+            //datum.put("title", title_str);
+            //datum.put("subtitle", subtitle_str);
+            //data.add(datum);
+            buffer.append("insured: "+ res.getString(3)+"\n");
+            buffer.append("email: "+ res.getString(4)+"\n");
+            buffer.append("phone: "+ res.getString(5)+"\n");
+            buffer.append("policy_num: "+ res.getString(6)+"\n");
+            buffer.append("amount: "+ res.getString(7)+"\n");
+            buffer.append("currency: "+ res.getString(8)+"\n");
+            buffer.append("due_date: "+ res.getString(9)+"\n");
+            buffer.append("notes: "+ res.getString(10)+"\n\n");
+            i = i+1;
+        }
+
+        //showMessage("Data", buffer.toString());
     }
 
 }

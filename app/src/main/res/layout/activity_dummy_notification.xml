@@ -56,11 +56,10 @@
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/nameTextView"
         android:layout_alignBottom="@+id/nameTextView"
+        android:layout_alignParentEnd="true"
         android:layout_alignStart="@+id/emailEditText"
         android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Jack Sparrow"
-        android:layout_alignParentEnd="true" />
+        android:inputType="textPersonName" />
 
     <TextView
         android:id="@+id/emailEditText"
@@ -68,11 +67,10 @@
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/emailTextView"
         android:layout_alignBottom="@+id/emailTextView"
+        android:layout_alignParentEnd="true"
         android:layout_alignStart="@+id/phoneEditText"
         android:ems="10"
-        android:inputType="textEmailAddress"
-        android:text="pratsona@gmail.com"
-        android:layout_alignParentEnd="true" />
+        android:inputType="textEmailAddress" />
 
     <TextView
         android:id="@+id/phoneEditText"
@@ -82,8 +80,7 @@
         android:layout_alignBottom="@+id/phoneTextView"
         android:layout_alignEnd="@+id/createEventButton"
         android:ems="10"
-        android:inputType="phone"
-        android:text="9975794996" />
+        android:inputType="phone" />
 
     <TextView
         android:id="@+id/notesTextView"
@@ -100,11 +97,10 @@
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/notesTextView"
         android:layout_alignBottom="@+id/notesTextView"
+        android:layout_alignParentEnd="true"
         android:layout_alignStart="@+id/phoneEditText"
         android:ems="10"
-        android:inputType="text"
-        android:text="Discussion on Mutual Funds SIP"
-        android:layout_alignParentEnd="true" />
+        android:inputType="text" />
 
     <TextView
         android:id="@+id/locationTextView"

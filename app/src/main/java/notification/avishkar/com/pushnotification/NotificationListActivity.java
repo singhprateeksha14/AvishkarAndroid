@@ -18,22 +18,19 @@ import java.util.Map;
 public class NotificationListActivity extends AppCompatActivity {
     ListView list;
     DatabaseHelper mydb;
-    String[] titles_str = {"Jack Sparrow", "Davy Jones", "Will Turner", "Elizabeth Swann"};
-    String[] subtitles_str = {"Premium for Insurance Plan DW231K due on October 21", "Mutual Funds SIP due on October 11th", "Mutual Funds scheme matures on October 4th", "Premium for Insurance Plan LOKH765W due on 12th September"};
+    //String[] titles_str = {"Jack Sparrow", "Davy Jones", "Will Turner", "Elizabeth Swann"};
+    //String[] subtitles_str = {"Premium for Insurance Plan DW231K due on October 21", "Mutual Funds SIP due on October 11th", "Mutual Funds scheme matures on October 4th", "Premium for Insurance Plan LOKH765W due on 12th September"};
+    List<Map<String, String>> data = new ArrayList<Map<String, String>>();
+    Map<String, String> datum = new HashMap<String, String>(2);
+    ArrayList<Integer> id = new ArrayList<Integer>(0);
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(notification.avishkar.com.pushnotification.R.layout.activity_notification_list);
-        mydb = new DatabaseHelper(this);
-        list = (ListView) findViewById(notification.avishkar.com.pushnotification.R.id.list);
-        List<Map<String, String>> data = new ArrayList<Map<String, String>>();
-        for (int i = 0; i < titles_str.length; i++) {
-            Map<String, String> datum = new HashMap<String, String>(2);
-            datum.put("title", titles_str[i]);
-            datum.put("subtitle", subtitles_str[i]);
-            data.add(datum);
-        }
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setContentView(notification.avishkar.com.pushnotification.R.layout.activity_notification_list);
+            mydb = new DatabaseHelper(this);
+            list = (ListView) findViewById(notification.avishkar.com.pushnotification.R.id.list);
+            viewAll();
         SimpleAdapter adapter = new SimpleAdapter(this, data,
                 android.R.layout.simple_list_item_2,
                 new String[]{"title", "subtitle"},
@@ -44,33 +41,31 @@ public class NotificationListActivity extends AppCompatActivity {
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Bundle bundle = new Bundle();
+                String Items = String.valueOf(parent.getItemAtPosition(position));
+                bundle.putString("ID","1");
                 Intent i = new Intent(NotificationListActivity.this, NotificationActivity.class);
+                i.putExtras(bundle);
                 startActivity(i);
             }
         });
-        viewAll();
+
     }
     public void viewAll()
     {
         Cursor res = mydb.getAllData();
-        StringBuffer buffer = new StringBuffer();
+        String title_str = null;
+        String subtitle_str =null;
         while (res.moveToNext())
         {
-            buffer.append("ID: "+ res.getInt(0)+"\n");
-            buffer.append("title: "+ res.getString(1)+"\n");
-            buffer.append("message: "+ res.getString(2)+"\n");
-            buffer.append("insured: "+ res.getString(3)+"\n");
-            buffer.append("email: "+ res.getString(4)+"\n");
-            buffer.append("phone: "+ res.getString(5)+"\n");
-            buffer.append("policy_num: "+ res.getString(6)+"\n");
-            buffer.append("amount: "+ res.getString(7)+"\n");
-            buffer.append("currency: "+ res.getString(8)+"\n");
-            buffer.append("due_date: "+ res.getString(9)+"\n");
-            buffer.append("notes: "+ res.getString(10)+"\n\n");
 
+            title_str= res.getInt(0)+". "+res.getString(1);
+            subtitle_str= res.getString(2);
+            datum.put("title", title_str);
+            datum.put("subtitle", subtitle_str);
+            data.add(datum);
+            showMessage("ID:",res.getInt(0)+"");
         }
-
-        showMessage("Data", buffer.toString());
     }
     public void showMessage(String title, String message)
     {
