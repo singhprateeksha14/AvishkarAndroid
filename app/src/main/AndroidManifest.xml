@@ -18,22 +18,27 @@
             android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".NotificationListActivity"
+        <activity
+            android:name=".NotificationListActivity"
             android:label="@string/NotificationCenter"
             android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".NotificationActivity"
+        <activity
+            android:name=".NotificationActivity"
             android:label="@string/SetupMetting"
             android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -43,5 +48,11 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
+        <activity
+            android:name=".CalendarListActivity"
+            android:label="@string/title_activity_calendar_list"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
+
 </manifest>

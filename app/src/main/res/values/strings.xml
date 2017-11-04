@@ -8,4 +8,5 @@
     <string name="KeyBusinessTools">Key Business Tools</string>
     <string name="NotificationCenter">Notification Center</string>
     <string name="SetupMetting">Setup Metting</string>
+    <string name="title_activity_calendar_list">CalendarListActivity</string>
 </resources>

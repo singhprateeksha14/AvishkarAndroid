@@ -54,9 +54,13 @@ public class activity_home extends AppCompatActivity {
         home_Listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent i = new Intent(activity_home.this, NotificationListActivity.class);
+
                 String Items = String.valueOf(parent.getItemAtPosition(position));
-                if (Items == "My Notifications") {
+                if (Items.contains("My Notifications")) {
+                    Intent i = new Intent(activity_home.this, NotificationListActivity.class);
+                    startActivity(i);
+                } else if (Items.contains("My Calendar")) {
+                    Intent i = new Intent(activity_home.this, CalendarListActivity.class);
                     startActivity(i);
                 } else {
                     Toast.makeText(activity_home.this, Items + " Activity Not Defined...", Toast.LENGTH_LONG).show();
