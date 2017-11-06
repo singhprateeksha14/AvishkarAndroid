@@ -9,8 +9,8 @@ import java.util.Date;
 
 public class AdvisorEvent {
 
-    String name, location, date;
-    Time time;
+    String name, location, date,  time;
+
 
     public String getName() {
         return name;
@@ -36,11 +36,11 @@ public class AdvisorEvent {
         this.date = date;
     }
 
-    public Time getTime() {
+    public String getTime() {
         return time;
     }
 
-    public void setTime(Time time) {
+    public void setTime(String time) {
         this.time = time;
     }
 

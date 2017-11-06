@@ -76,11 +76,11 @@ public class activity_home extends AppCompatActivity {
         if (getIntent().getExtras() != null) {
             for (String key : getIntent().getExtras().keySet()) {
                 if (key.equals("title")) {
-                    Toast.makeText(activity_home.this, getIntent().getExtras().getString(key), Toast.LENGTH_LONG).show();
+                  //  Toast.makeText(activity_home.this, getIntent().getExtras().getString(key), Toast.LENGTH_LONG).show();
                     title = getIntent().getExtras().getString(key);
                 }
                 if (key.equals("message")) {
-                    Toast.makeText(activity_home.this, getIntent().getExtras().getString(key), Toast.LENGTH_LONG).show();
+                  //  Toast.makeText(activity_home.this, getIntent().getExtras().getString(key), Toast.LENGTH_LONG).show();
                     message = getIntent().getExtras().getString(key);
                 }
                 if (key.equals("insured")) {
@@ -121,13 +121,13 @@ public class activity_home extends AppCompatActivity {
             //String tile, String message, String Insured, String email, String phone,String policy_num, Integer amount, String currency, String due_Date, String notes
             isPushNotificationSaved = mydb.insertData(title, message, insured, email, phone, policy_num, amount, currency, due_date, notes);
             if (isPushNotificationSaved = true) {
-                Toast.makeText(activity_home.this, "Push Notification Saved! Details : Title: " + title + " Message: " + message + " Insured: " + insured, Toast.LENGTH_LONG).show();
+               // Toast.makeText(activity_home.this, "Push Notification Saved! Details : Title: " + title + " Message: " + message + " Insured: " + insured, Toast.LENGTH_LONG).show();
             }
             if (isPushNotificationSaved != true) {
-                Toast.makeText(activity_home.this, "Push Notification Not Saved! Details : Title: " + title + " Message: " + message + " Insured: " + insured, Toast.LENGTH_LONG).show();
+               // Toast.makeText(activity_home.this, "Push Notification Not Saved! Details : Title: " + title + " Message: " + message + " Insured: " + insured, Toast.LENGTH_LONG).show();
             }
         } else {
-            Toast.makeText(activity_home.this, "Push Notification Details : Title: " + title + " Message: " + message + " Insured: " + insured, Toast.LENGTH_LONG).show();
+           // Toast.makeText(activity_home.this, "Push Notification Details : Title: " + title + " Message: " + message + " Insured: " + insured, Toast.LENGTH_LONG).show();
         }
         return isPushNotificationSaved;
     }
