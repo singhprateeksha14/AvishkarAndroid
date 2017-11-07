@@ -1,8 +1,8 @@
 package notification.avishkar.com.pushnotification;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -11,23 +11,6 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-
-import android.content.Intent;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.SimpleAdapter;
-import android.widget.Toast;
-
-import com.google.firebase.messaging.RemoteMessage;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.google.firebase.iid.FirebaseInstanceId;
 
 public class activity_home extends AppCompatActivity {
@@ -35,7 +18,7 @@ public class activity_home extends AppCompatActivity {
     ListView home_Listview;
     DatabaseHelper mydb;
     String title, message, insured, email, phone, policy_num, amount, notes, currency, due_date;
-    String[] titles_str = {"My Notifications        	>", "My Calendar        	 	>", "Key Business Tools      	>", "My Favorites            	>", "Principal Blogs 	 	>", "Principal News      		>"};
+    String[] titles_str = {"My Notifications", "My Calendar", "Key Business Tools", "My Favorites", "Principal Blogs", "Principal News"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
