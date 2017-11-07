@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -27,9 +28,8 @@ import java.util.TimeZone;
 
 public class NotificationActivity extends AppCompatActivity {
 
-    Button calendarInviteButton, callButton, emailButton;
-    EditText  locationEdit;
-    TextView nameEdit, emailEdit, phoneEdit, notesEdit;
+    ImageButton callButton, calendarInviteButton, emailButton;
+    EditText  locationEdit, nameEdit, emailEdit, phoneEdit;
     Calendar myCalendar;
     DatePickerDialog.OnDateSetListener date;
     int mHour, mMinute, mMonth, mDate, mYear;
@@ -46,13 +46,12 @@ public class NotificationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dummy_notification);
 
-        calendarInviteButton = (Button) findViewById(R.id.createEventButton);
-        callButton = (Button) findViewById(R.id.callButton);
-        emailButton = (Button) findViewById(R.id.emailButton);
-        nameEdit = (TextView) findViewById(R.id.nameEditText);
-        emailEdit = (TextView) findViewById(R.id.emailEditText);
-        phoneEdit = (TextView) findViewById(R.id.phoneEditText);
-        notesEdit = (TextView) findViewById(R.id.notesEditText);
+        calendarInviteButton = (ImageButton) findViewById(R.id.createEventButton);
+        callButton = (ImageButton) findViewById(R.id.callButton);
+        emailButton = (ImageButton) findViewById(R.id.emailButton);
+        nameEdit = (EditText) findViewById(R.id.nameEditText);
+        emailEdit = (EditText) findViewById(R.id.emailEditText);
+        phoneEdit = (EditText) findViewById(R.id.phoneEditText);
         locationEdit = (EditText) findViewById(R.id.locationEditText);
         myCalendar = Calendar.getInstance();
         final Calendar c = Calendar.getInstance();
@@ -104,6 +103,9 @@ public class NotificationActivity extends AppCompatActivity {
                             long eventID = Long.parseLong(uriCalendarInsertEvent.getLastPathSegment());
                             addAttendees(eventID);
                             Toast.makeText(getApplicationContext(), "Invite Sent", Toast.LENGTH_SHORT).show();
+                            Intent i = new Intent(NotificationActivity.this, CalendarListActivity.class);
+                            startActivity(i);
+                            ActivityCompat.finishAffinity(NotificationActivity.this);
                         }
                     }
                 }, mHour, mMinute, false);
@@ -263,6 +265,7 @@ public class NotificationActivity extends AppCompatActivity {
 
                         intent.setData(Uri.parse("tel:" + phoneEdit.getText().toString()));
                         getApplicationContext().startActivity(intent);
+
                     }
 
                 } else {
@@ -284,6 +287,9 @@ public class NotificationActivity extends AppCompatActivity {
                         long eventID = Long.parseLong(uriCalendarInsertEvent.getLastPathSegment());
                         addAttendees(eventID);
                         Toast.makeText(getApplicationContext(), "Invite Sent", Toast.LENGTH_SHORT).show();
+                        Intent i = new Intent(NotificationActivity.this, CalendarListActivity.class);
+                        startActivity(i);
+                        ActivityCompat.finishAffinity(NotificationActivity.this);
                     }
 
                 } else {
@@ -328,6 +334,14 @@ public class NotificationActivity extends AppCompatActivity {
         }
 
         //showMessage("Data", buffer.toString());
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        Intent i = new Intent(NotificationActivity.this, CalendarListActivity.class);
+        startActivity(i);
+        finish();
     }
 
 }

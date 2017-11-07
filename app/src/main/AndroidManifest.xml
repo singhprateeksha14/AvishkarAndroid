@@ -52,6 +52,10 @@
         <activity
             android:name=".CalendarListActivity"
             android:label="@string/title_activity_calendar_list"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".SampleActivity"
+            android:label="@string/title_activity_sample"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.net.Uri;
@@ -11,6 +12,7 @@ import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -44,11 +46,21 @@ public class CalendarListActivity extends Activity {
                 listOfAdvisorEvents.add(event);
             }
         }
-        Toast.makeText(this, listOfAdvisorEvents.toString(), Toast.LENGTH_LONG).show();
+      //  Toast.makeText(this, listOfAdvisorEvents.toString(), Toast.LENGTH_LONG).show();
         activity = this;
         Resources res =getResources();
         adapter = new CalendarListAdapter(activity, listOfAdvisorEvents, res);
         calendarEventList.setAdapter(adapter);
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(CalendarListActivity.this, NotificationActivity.class);
+                startActivity(i);
+                ActivityCompat.finishAffinity(CalendarListActivity.this);
+            }
+        });
 
     }
 
@@ -92,6 +104,13 @@ public class CalendarListActivity extends Activity {
 
     public void onItemClick(int position) {
         Toast.makeText(this, "Item number :" + position + "clicked", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent i = new Intent(CalendarListActivity.this, activity_home.class);
+        startActivity(i);
+        finish();
     }
 
 }
