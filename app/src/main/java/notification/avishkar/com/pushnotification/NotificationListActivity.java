@@ -65,7 +65,6 @@ public class NotificationListActivity extends AppCompatActivity {
             }
         });
     }
-
     public void viewAll() {
         mydb = new DatabaseHelper(this);
         Cursor res = mydb.getAllData();
