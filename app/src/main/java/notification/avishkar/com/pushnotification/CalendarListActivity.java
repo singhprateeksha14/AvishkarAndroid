@@ -1,25 +1,21 @@
 package notification.avishkar.com.pushnotification;
 
+import android.Manifest;
 import android.app.Activity;
-import android.content.ContentResolver;
-import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -28,11 +24,22 @@ import java.util.List;
 
 public class CalendarListActivity extends Activity {
 
+    final int MY_PERMISSIONS_REQUEST_WRITE_CALENDAR_EVENT = 1;
+    final int MY_PERMISSIONS_REQUEST_READ_CALENDAR_ATTENDEES = 2;
+    final int MY_PERMISSIONS_REQUEST_CALL_PHONE = 3;
     public List<AdvisorEvent> advisorEvents = new ArrayList<AdvisorEvent>();
     AdvisorEvent advisorEvent;
     ListView calendarEventList;
     CalendarListAdapter adapter = null;
     CalendarListActivity activity = null;
+
+    public static String getDate(long milliSeconds) {
+        SimpleDateFormat formatter = new SimpleDateFormat(
+                "dd/MM/yyyy hh:mm:ss a");
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(milliSeconds);
+        return formatter.format(calendar.getTime());
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +79,10 @@ public class CalendarListActivity extends Activity {
         Date endDate = calendar.getTime();
         long beginMillis = startDate.getTime();
         long endMillis = endDate.getTime();
+        if (ContextCompat.checkSelfPermission(CalendarListActivity.this, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
+            // Toast.makeText(getApplicationContext(), "NOooooo Invite Sent", Toast.LENGTH_SHORT).show();
+            ActivityCompat.requestPermissions(CalendarListActivity.this, new String[]{android.Manifest.permission.READ_CALENDAR}, MY_PERMISSIONS_REQUEST_READ_CALENDAR_ATTENDEES);
+        }
         Cursor cursor = CalendarContract.Instances.query(context.getContentResolver(), new String[]{"calendar_id", "title", "description",
                 "dtstart", "dtend", "eventLocation"}, beginMillis, endMillis);
         cursor.moveToFirst();
@@ -92,14 +103,6 @@ public class CalendarListActivity extends Activity {
         }
         // Toast.makeText(getApplicationContext(), advisorEvents.toString(), Toast.LENGTH_LONG).show();
         return advisorEvents;
-    }
-
-    public static String getDate(long milliSeconds) {
-        SimpleDateFormat formatter = new SimpleDateFormat(
-                "dd/MM/yyyy hh:mm:ss a");
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(milliSeconds);
-        return formatter.format(calendar.getTime());
     }
 
     public void onItemClick(int position) {

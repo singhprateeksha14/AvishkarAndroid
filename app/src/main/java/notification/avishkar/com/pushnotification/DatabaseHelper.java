@@ -43,19 +43,12 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         contentValues.put("Due_Date",due_Date);
         contentValues.put("Notes",notes);
         long result = db.insert(TABLE_NAME,null,contentValues);
-        if(result ==-1)
-        {
-            return false;
-        }
-        else
-        {
-            return  true;
-        }
+        return result != -1;
     }
     public Cursor getAllData()
     {
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor res = db.rawQuery("select * from "+TABLE_NAME,null);
+        Cursor res = db.rawQuery("select * from " + TABLE_NAME + " ORDER BY ID DESC", null);
         return res;
     }
 }

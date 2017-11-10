@@ -1,8 +1,5 @@
 package notification.avishkar.com.pushnotification;
 
-import java.sql.Time;
-import java.util.Date;
-
 /**
  * Created by Prateeksha Singh on 11/4/2017.
  */
@@ -17,6 +14,14 @@ public class AdvisorEvent {
     }
 
     public void setName(String name) {
+        this.name = name;
+    }
+
+    public void settitle(String name) {
+        this.name = name;
+    }
+
+    public void setsubtitle(String name) {
         this.name = name;
     }
 
