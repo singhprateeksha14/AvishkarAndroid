@@ -16,11 +16,9 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -28,6 +26,9 @@ import java.util.TimeZone;
 
 public class NotificationActivity extends AppCompatActivity {
 
+    final int MY_PERMISSIONS_REQUEST_WRITE_CALENDAR_EVENT = 1;
+    final int MY_PERMISSIONS_REQUEST_WRITE_CALENDAR_ATTENDEES = 2;
+    final int MY_PERMISSIONS_REQUEST_CALL_PHONE = 3;
     ImageButton callButton, calendarInviteButton, emailButton;
     EditText  locationEdit, nameEdit, emailEdit, phoneEdit;
     Calendar myCalendar;
@@ -36,9 +37,6 @@ public class NotificationActivity extends AppCompatActivity {
     Calendar start, end;
     Uri uriCalendarInsertAttendees, uriCalendarInsertEvent;
     ContentValues valuesCalendarInsertAttendees, valuesCalendarInsertEvent;
-    final int MY_PERMISSIONS_REQUEST_WRITE_CALENDAR_EVENT = 1;
-    final int MY_PERMISSIONS_REQUEST_WRITE_CALENDAR_ATTENDEES = 2;
-    final int MY_PERMISSIONS_REQUEST_CALL_PHONE = 3;
     DatabaseHelper mydb;
 
     @Override
@@ -57,7 +55,9 @@ public class NotificationActivity extends AppCompatActivity {
         final Calendar c = Calendar.getInstance();
         mHour = c.get(Calendar.HOUR_OF_DAY);
         mMinute = c.get(Calendar.MINUTE);
-
+        nameEdit.setText(getIntent().getStringExtra("name"));
+        emailEdit.setText(getIntent().getStringExtra("email"));
+        phoneEdit.setText(getIntent().getStringExtra("phone"));
         calendarInviteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
