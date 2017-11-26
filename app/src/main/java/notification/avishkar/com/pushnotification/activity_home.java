@@ -15,7 +15,7 @@ public class activity_home extends AppCompatActivity {
     private static final String REG_TOKEN = "REG_TOKEN";
     TextView notifications, calendar,businessTools, favourites;
     DatabaseHelper mydb;
-
+    String result, messagingService, title, message, insured, email, phone, policy_num, amount, notes, currency, due_date;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,7 +27,17 @@ public class activity_home extends AppCompatActivity {
         mydb = new DatabaseHelper(this);
         String recent_token = FirebaseInstanceId.getInstance().getToken();
         //Toast.makeText(activity_home.this, "recent_token: " + recent_token, Toast.LENGTH_LONG).show();
-        Log.d(REG_TOKEN, recent_token);
+        Log.d(REG_TOKEN, "Reg Token" + recent_token);
+
+        messagingService = getIntent().getStringExtra("MessagingService");
+        if (messagingService == "MessagingService") {
+            title = getIntent().getStringExtra("title");
+            message = getIntent().getStringExtra("message");
+            insured = getIntent().getStringExtra("insured");
+            result = getIntent().getStringExtra("Result");
+            Toast.makeText(activity_home.this, "messagingService:" + messagingService, Toast.LENGTH_LONG).show();
+        }
+
         notifications.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -6,7 +6,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
-import android.widget.Toast;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -16,6 +15,7 @@ import com.google.firebase.messaging.RemoteMessage;
  */
 
 public class MessagingService extends FirebaseMessagingService{
+    private static final String MESSAGING_SERVICE = "MESSAGING_SERVICE";
     boolean isPushNotificationSaved = false;
     DatabaseHelper mydb;
     @Override
@@ -36,11 +36,6 @@ public class MessagingService extends FirebaseMessagingService{
                 intent.putExtra("Result","Failed");
             }
         }
-        else
-        {
-            intent.putExtra("Result","title, message and insured details are missing.");
-        }
-
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this,0,intent,PendingIntent.FLAG_ONE_SHOT);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this);
@@ -51,8 +46,6 @@ public class MessagingService extends FirebaseMessagingService{
         notificationBuilder.setContentIntent(pendingIntent);
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(0,notificationBuilder.build());
-
-
 
     }
 }

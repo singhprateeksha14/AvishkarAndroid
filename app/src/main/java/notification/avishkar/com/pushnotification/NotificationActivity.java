@@ -14,8 +14,10 @@ import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -30,6 +32,7 @@ public class NotificationActivity extends AppCompatActivity {
     final int MY_PERMISSIONS_REQUEST_WRITE_CALENDAR_ATTENDEES = 2;
     final int MY_PERMISSIONS_REQUEST_CALL_PHONE = 3;
     ImageButton callButton, calendarInviteButton, emailButton;
+    Button Dist_Dura_Call_BTN;
     EditText  locationEdit, nameEdit, emailEdit, phoneEdit;
     Calendar myCalendar;
     DatePickerDialog.OnDateSetListener date;
@@ -45,6 +48,7 @@ public class NotificationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_dummy_notification);
 
         calendarInviteButton = (ImageButton) findViewById(R.id.createEventButton);
+        Dist_Dura_Call_BTN = (Button) findViewById(R.id.Dist_Dura_Call_BTN);
         callButton = (ImageButton) findViewById(R.id.callButton);
         emailButton = (ImageButton) findViewById(R.id.emailButton);
         nameEdit = (EditText) findViewById(R.id.nameEditText);
@@ -58,6 +62,11 @@ public class NotificationActivity extends AppCompatActivity {
         nameEdit.setText(getIntent().getStringExtra("name"));
         emailEdit.setText(getIntent().getStringExtra("email"));
         phoneEdit.setText(getIntent().getStringExtra("phone"));
+        Dist_Dura_Call_BTN.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                Dist_Dura_Call_BTN();
+            }
+        });
         calendarInviteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -336,6 +345,9 @@ public class NotificationActivity extends AppCompatActivity {
         //showMessage("Data", buffer.toString());
     }
 
+    public void Dist_Dura_Call_BTN() {
+        showMessage("Test", "Test1");
+    }
 
     @Override
     public void onBackPressed() {
@@ -344,4 +356,12 @@ public class NotificationActivity extends AppCompatActivity {
         finish();
     }
 
+    public void showMessage(String title, String message) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(true);
+        builder.setTitle(title);
+        builder.setMessage(message);
+        builder.show();
+
+    }
 }
