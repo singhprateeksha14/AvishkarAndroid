@@ -11,6 +11,7 @@ import android.database.Cursor;
 import android.icu.util.Calendar;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.provider.CalendarContract;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -24,6 +25,11 @@ import android.widget.ImageButton;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.TimeZone;
 
 public class NotificationActivity extends AppCompatActivity {
@@ -62,9 +68,19 @@ public class NotificationActivity extends AppCompatActivity {
         nameEdit.setText(getIntent().getStringExtra("name"));
         emailEdit.setText(getIntent().getStringExtra("email"));
         phoneEdit.setText(getIntent().getStringExtra("phone"));
+
+        if (android.os.Build.VERSION.SDK_INT > 9) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
+
         Dist_Dura_Call_BTN.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                Dist_Dura_Call_BTN();
+                try {
+                    Dist_Dura_Call_BTN();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
         calendarInviteButton.setOnClickListener(new View.OnClickListener() {
@@ -345,8 +361,21 @@ public class NotificationActivity extends AppCompatActivity {
         //showMessage("Data", buffer.toString());
     }
 
-    public void Dist_Dura_Call_BTN() {
+    public void Dist_Dura_Call_BTN() throws IOException {
         showMessage("Test", "Test1");
+
+        URL url = new URL("https://maps.googleapis.com/maps/api/distancematrix/json?origins=Magarpatta, Hadapsar, Pune&destinations=New Sangvi, Pune&mode=drive");
+        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+        try {
+            InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+            readStream(in);
+        } finally {
+            urlConnection.disconnect();
+        }
+
+    }
+
+    private void readStream(InputStream in) {
     }
 
     @Override
