@@ -365,12 +365,18 @@ public class NotificationActivity extends AppCompatActivity {
         showMessage("Test", "Test1");
 
         URL url = new URL("https://maps.googleapis.com/maps/api/distancematrix/json?origins=Magarpatta, Hadapsar, Pune&destinations=New Sangvi, Pune&mode=drive");
-        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setReadTimeout(15001);
+        conn.setConnectTimeout(15001);
+        conn.setDoInput(true);
+        conn.setDoOutput(true);
+        conn.setRequestMethod("POST");
         try {
-            InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+            InputStream in = new BufferedInputStream(conn.getInputStream());
+
             readStream(in);
         } finally {
-            urlConnection.disconnect();
+            conn.disconnect();
         }
 
     }
