@@ -134,4 +134,23 @@
         android:onClick="Dist_Dura_Call_BTN()"
         android:text="Calculate Distance and Duration" />
 
+    <TextView
+        android:id="@+id/textView_result1"
+        android:layout_width="120dp"
+        android:layout_height="20dp"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/textView_result2"
+        android:layout_marginBottom="26dp"
+         />
+
+    <TextView
+        android:id="@+id/textView_result2"
+        android:layout_width="120dp"
+        android:layout_height="20dp"
+        android:layout_centerHorizontal="true"
+        android:layout_alignEnd="@+id/createEventButton"
+        android:layout_below="@+id/createEventButton"
+        android:layout_marginTop="22dp" />
+
 </RelativeLayout>

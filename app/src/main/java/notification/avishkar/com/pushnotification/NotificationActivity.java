@@ -5,10 +5,13 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.icu.util.Calendar;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.CalendarContract;
@@ -16,17 +19,30 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.List;
 import java.util.TimeZone;
 
-public class NotificationActivity extends AppCompatActivity {
+import com.google.android.gms.maps.model.LatLng;
+
+public class NotificationActivity extends AppCompatActivity implements GeoTask.Geo {
 
     final int MY_PERMISSIONS_REQUEST_WRITE_CALENDAR_EVENT = 1;
     final int MY_PERMISSIONS_REQUEST_WRITE_CALENDAR_ATTENDEES = 2;
@@ -34,6 +50,7 @@ public class NotificationActivity extends AppCompatActivity {
     ImageButton callButton, calendarInviteButton, emailButton;
     Button Dist_Dura_Call_BTN;
     EditText  locationEdit, nameEdit, emailEdit, phoneEdit;
+    TextView tv_result1,tv_result2;
     Calendar myCalendar;
     DatePickerDialog.OnDateSetListener date;
     int mHour, mMinute, mMonth, mDate, mYear;
@@ -47,9 +64,13 @@ public class NotificationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dummy_notification);
 
+        tv_result1= (TextView) findViewById(R.id.textView_result1);
+        tv_result2=(TextView) findViewById(R.id.textView_result2);
+
         calendarInviteButton = (ImageButton) findViewById(R.id.createEventButton);
         Dist_Dura_Call_BTN = (Button) findViewById(R.id.Dist_Dura_Call_BTN);
         callButton = (ImageButton) findViewById(R.id.callButton);
+
         emailButton = (ImageButton) findViewById(R.id.emailButton);
         nameEdit = (EditText) findViewById(R.id.nameEditText);
         emailEdit = (EditText) findViewById(R.id.emailEditText);
@@ -62,11 +83,22 @@ public class NotificationActivity extends AppCompatActivity {
         nameEdit.setText(getIntent().getStringExtra("name"));
         emailEdit.setText(getIntent().getStringExtra("email"));
         phoneEdit.setText(getIntent().getStringExtra("phone"));
+
         Dist_Dura_Call_BTN.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                Dist_Dura_Call_BTN();
+
+                /*LatLng local=null;
+                try {
+                    List<Address> addresses = Dist_Dura_Call_BTN(local);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }*/
+                String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=Magarpatta,%20Hadapsar,%20Pune&destinations=New%20Sangvi,%20Pune&mode=driving";
+                new GeoTask(NotificationActivity.this).execute(url);
             }
         });
+
+
         calendarInviteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -236,6 +268,16 @@ public class NotificationActivity extends AppCompatActivity {
 
     }
 
+
+    public void setDouble(String result) {
+        String res[]=result.split(",");
+        Double min=Double.parseDouble(res[0])/60;
+        int dist=Integer.parseInt(res[1])/1000;
+        tv_result1.setText("Duration= " + (int) (min / 60) + " hr " + (int) (min % 60) + " mins");
+        tv_result2.setText("Distance= " + dist + " kilometers");
+
+    }
+
     @Override
     // @SuppressWarnings({"MissingPermission"})
     public void onRequestPermissionsResult(int requestCode,
@@ -345,9 +387,38 @@ public class NotificationActivity extends AppCompatActivity {
         //showMessage("Data", buffer.toString());
     }
 
-    public void Dist_Dura_Call_BTN() {
-        showMessage("Test", "Test1");
+    public List<Address> Dist_Dura_Call_BTN(LatLng point) throws IOException {
+
+        Geocoder geocoder;
+        List<Address> addresses;
+    try{
+
+        geocoder = new Geocoder(this);
+        if (point.latitude != 0 || point.longitude != 0) {
+            addresses = geocoder.getFromLocation(point.latitude, point.longitude, 1);
+            String address = addresses.get(0).getAddressLine(0);
+            String city = addresses.get(0).getAddressLine(1);
+            String country = addresses.get(0).getAddressLine(2);
+            System.out.println(address + " - " + city + " - " + country);
+            showMessage("Success", "address" + address + " ,City" + city + " ,Country" + country);
+            return addresses;
+        }
     }
+    catch (IOException e){
+            Toast.makeText(this, "latitude and longitude are null", Toast.LENGTH_LONG).show();
+            showMessage("Error", "latitude and longitude are null");
+            return null;
+        } catch (Exception e1){
+
+        showMessage("Error", "Not Getting");
+        return null;
+    }
+
+        //showMessage("Test", "Test1");
+        //getDistanceInfo();
+        return null;
+    }
+
 
     @Override
     public void onBackPressed() {
@@ -363,5 +434,66 @@ public class NotificationActivity extends AppCompatActivity {
         builder.setMessage(message);
         builder.show();
 
+    }
+
+    private double getDistanceInfo() {
+        StringBuilder stringBuilder = new StringBuilder();
+        Double dist = 0.0;
+        Double latTo= 0.0;
+        Double lngTo= 0.0;
+        try {
+
+
+            //destinationAddress = destinationAddress.replaceAll(" ","%20");
+            //URL url = new URL("http://maps.googleapis.com/maps/api/directions/json?origin=" + lat1 + "," + lng1 + "&destination=" + latTo + "," + lngTo + "&mode=driving&sensor=false");
+            URL url = new URL("https://maps.googleapis.com/maps/api/distancematrix/json?origins=Magarpatta, Hadapsar, Pune&destinations=New Sangvi, Pune&mode=driving");
+
+
+            HttpURLConnection client=(HttpURLConnection) url.openConnection();
+          //Google Map Distance Matrix API by Srivastava Chintakindi
+            //HttpPost httppost = new HttpPost(url);
+
+/*
+HttpClient client = new DefaultHttpClient();
+HttpResponse response;
+stringBuilder = new StringBuilder();
+
+
+response = client.execute(httppost);
+HttpEntity entity = response.getEntity();
+InputStream stream = entity.getContent();
+int b;
+while ((b = stream.read()) != -1) {
+stringBuilder.append((char) b);
+}
+*/
+        } /*catch (ClientProtocolException e) {
+        }*/ catch (IOException e) {
+        }
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+
+            jsonObject = new JSONObject(stringBuilder.toString());
+
+            JSONArray array = jsonObject.getJSONArray("routes");
+
+            JSONObject routes = array.getJSONObject(0);
+
+            JSONArray legs = routes.getJSONArray("legs");
+
+            JSONObject steps = legs.getJSONObject(0);
+
+            JSONObject distance = steps.getJSONObject("distance");
+
+            Log.i("Distance", distance.toString());
+            dist = Double.parseDouble(distance.getString("text").replaceAll("[^\\.0123456789]","") );
+
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        return dist;
     }
 }
