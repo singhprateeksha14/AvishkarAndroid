@@ -44,15 +44,7 @@
         android:text="Phone:"
         android:textStyle="bold" />
 
-    <ImageButton
-        android:id="@+id/createEventButton"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_below="@+id/Dist_Dura_Call_BTN"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="35dp"
-        android:src="@drawable/icons8_calendar_14"
-        android:text="Create Calendar Invite" />
+
 
     <EditText
         android:id="@+id/nameEditText"
@@ -83,34 +75,52 @@
         android:ems="10"
         android:inputType="phone" />
 
+    <EditText
+        android:id="@+id/toLocationText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/phoneEditText"
+        android:ems="10"
+        android:inputType="textPostalAddress" />
+    <TextView
+        android:id="@+id/fromLocationTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/emailTextView"
+        android:layout_below="@+id/phoneTextView"
+        android:layout_marginTop="24dp"
+        android:text="From:"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/locationTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/phoneTextView"
-        android:layout_below="@+id/phoneTextView"
-        android:layout_marginTop="30dp"
-        android:text="Location"
+        android:layout_alignStart="@+id/nameTextView"
+        android:layout_centerVertical="true"
+        android:layout_below="@+id/fromLocationTextView"
+        android:layout_marginTop="24dp"
+        android:text="Destination"
         android:textStyle="bold" />
 
     <EditText
         android:id="@+id/locationEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/phoneEditText"
-        android:layout_below="@+id/phoneEditText"
+        android:layout_alignBaseline="@+id/locationTextView"
+        android:layout_alignBottom="@+id/locationTextView"
+        android:layout_alignParentEnd="true"
         android:ems="10"
-        android:inputType="text" />
+        android:inputType="textPostalAddress" />
 
     <ImageButton
         android:id="@+id/callButton"
         android:layout_width="70dp"
         android:layout_height="70dp"
-        android:layout_below="@+id/Dist_Dura_Call_BTN"
-        android:layout_marginEnd="24dp"
-        android:layout_marginTop="34dp"
-        android:layout_toStartOf="@+id/locationEditText"
+        android:layout_alignStart="@+id/locationTextView"
+        android:layout_alignTop="@+id/textView_result1"
+        android:layout_marginStart="17dp"
         android:src="@drawable/icons8_phone"
         android:text="Call Client" />
 
@@ -118,39 +128,48 @@
         android:id="@+id/emailButton"
         android:layout_width="70dp"
         android:layout_height="70dp"
-        android:layout_alignParentEnd="true"
+        android:layout_alignEnd="@+id/Dist_Dura_Call_BTN"
         android:layout_alignTop="@+id/createEventButton"
-        android:layout_marginEnd="42dp"
         android:src="@drawable/icons8_email"
         android:text="Send Email" />
+
+    <ImageButton
+        android:id="@+id/createEventButton"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_alignTop="@+id/callButton"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/icons8_calendar_14"
+        android:text="Create Calendar Invite" />
 
     <Button
         android:id="@+id/Dist_Dura_Call_BTN"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignStart="@+id/locationEditText"
-        android:layout_below="@+id/locationEditText"
-        android:onClick="Dist_Dura_Call_BTN()"
+        android:layout_above="@+id/textView_result1"
+        android:layout_alignStart="@+id/callButton"
+        android:layout_marginBottom="33dp"
         android:text="Calculate Distance and Duration" />
 
     <TextView
         android:id="@+id/textView_result1"
-        android:layout_width="120dp"
-        android:layout_height="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
+        android:layout_marginBottom="100dp"
         android:layout_alignStart="@+id/textView_result2"
-        android:layout_marginBottom="26dp"
-         />
+        android:textColor="#8A2BE2"
+        android:textSize="20sp"
+        />
 
     <TextView
         android:id="@+id/textView_result2"
-        android:layout_width="120dp"
-        android:layout_height="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_alignEnd="@+id/createEventButton"
-        android:layout_below="@+id/createEventButton"
-        android:layout_marginTop="22dp" />
+        android:textColor="#8A2BE2"
+        android:textSize="20sp" />
 
 </RelativeLayout>

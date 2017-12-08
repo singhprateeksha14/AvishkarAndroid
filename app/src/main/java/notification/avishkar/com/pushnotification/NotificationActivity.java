@@ -5,7 +5,7 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
-import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -13,6 +13,7 @@ import android.icu.util.Calendar;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.support.v4.app.ActivityCompat;
@@ -34,26 +35,38 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.TimeZone;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+
 public class NotificationActivity extends AppCompatActivity implements GeoTask.Geo {
+
+    private ArrayList<String> permissionsToRequest;
+    private ArrayList<String> permissionsRejected = new ArrayList<>();
+    private ArrayList<String> permissions = new ArrayList<>();
+
+    LocationTrack locationTrack;
 
     final int MY_PERMISSIONS_REQUEST_WRITE_CALENDAR_EVENT = 1;
     final int MY_PERMISSIONS_REQUEST_WRITE_CALENDAR_ATTENDEES = 2;
     final int MY_PERMISSIONS_REQUEST_CALL_PHONE = 3;
+    final static int ALL_PERMISSIONS_RESULT = 101;
     ImageButton callButton, calendarInviteButton, emailButton;
     Button Dist_Dura_Call_BTN;
-    EditText  locationEdit, nameEdit, emailEdit, phoneEdit;
+    EditText  locationEdit, nameEdit, emailEdit, phoneEdit, fromlocationEdit;
     TextView tv_result1,tv_result2;
     Calendar myCalendar;
     DatePickerDialog.OnDateSetListener date;
     int mHour, mMinute, mMonth, mDate, mYear;
+    String sFromLocation, sLocationEdit;
     Calendar start, end;
     Uri uriCalendarInsertAttendees, uriCalendarInsertEvent;
     ContentValues valuesCalendarInsertAttendees, valuesCalendarInsertEvent;
@@ -63,6 +76,11 @@ public class NotificationActivity extends AppCompatActivity implements GeoTask.G
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dummy_notification);
+
+        permissions.add(ACCESS_FINE_LOCATION);
+        permissions.add(ACCESS_COARSE_LOCATION);
+        permissionsToRequest = findUnAskedPermissions(permissions);
+        locationTrack = new LocationTrack(NotificationActivity.this);
 
         tv_result1= (TextView) findViewById(R.id.textView_result1);
         tv_result2=(TextView) findViewById(R.id.textView_result2);
@@ -76,6 +94,11 @@ public class NotificationActivity extends AppCompatActivity implements GeoTask.G
         emailEdit = (EditText) findViewById(R.id.emailEditText);
         phoneEdit = (EditText) findViewById(R.id.phoneEditText);
         locationEdit = (EditText) findViewById(R.id.locationEditText);
+        //Getting  locationEdit
+
+        fromlocationEdit = (EditText) findViewById(R.id.toLocationText);
+        //Getting  fromlocationEdit
+
         myCalendar = Calendar.getInstance();
         final Calendar c = Calendar.getInstance();
         mHour = c.get(Calendar.HOUR_OF_DAY);
@@ -84,17 +107,57 @@ public class NotificationActivity extends AppCompatActivity implements GeoTask.G
         emailEdit.setText(getIntent().getStringExtra("email"));
         phoneEdit.setText(getIntent().getStringExtra("phone"));
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+
+            if (permissionsToRequest.size() > 0)
+                requestPermissions(permissionsToRequest.toArray(new String[permissionsToRequest.size()]), ALL_PERMISSIONS_RESULT);
+        }
+
+        if (locationTrack.canGetLocation()) {
+            double longitude = locationTrack.getLongitude();
+            double latitude = locationTrack.getLatitude();
+
+                   /* Log.d("latitude",Double.toString(latitude));
+                    Log.d("longitude",Double.toString(longitude));
+*/
+                   /* double longitude = 72.88261;
+                    double latitude = 19.07283;
+                    */
+            String Adrs = getCompleteAddressString(latitude,longitude);
+            fromlocationEdit.setText(Adrs, TextView.BufferType.EDITABLE);
+
+
+            // Toast.makeText(getApplicationContext(), "Address: "+Adrs, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(), "Longitude:" + Double.toString(longitude) + "\nLatitude:" + Double.toString(latitude), Toast.LENGTH_SHORT).show();
+        } else {
+
+            locationTrack.showSettingsAlert();
+        }
+
         Dist_Dura_Call_BTN.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
 
-                /*LatLng local=null;
-                try {
-                    List<Address> addresses = Dist_Dura_Call_BTN(local);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }*/
-                String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=Magarpatta,%20Hadapsar,%20Pune&destinations=New%20Sangvi,%20Pune&mode=driving";
-                new GeoTask(NotificationActivity.this).execute(url);
+                sFromLocation= fromlocationEdit.getText().toString().trim();
+                sLocationEdit= locationEdit.getText().toString().trim();
+                System.out.println("FromLocation: "+sFromLocation+"Destination: "+sLocationEdit);
+
+               if(sFromLocation.isEmpty() || sLocationEdit.isEmpty()){
+                   AlertDialog.Builder alert = new AlertDialog.Builder(NotificationActivity.this);
+                   alert.setTitle("Location Required");
+                   alert.setMessage("Please enter From and Destination location to proceed further");
+                   alert.setPositiveButton("OK",null);
+                   alert.show();
+               }
+                else {
+                /*String CurLoc="Magarpatta,Pune,India";
+                String str_to=locationEdit.getText().toString();
+*/
+                   String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + sFromLocation + "&destinations=" + sLocationEdit + "&mode=driving";
+                   System.out.println("https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + sFromLocation + "&destinations=" + sLocationEdit + "&mode=driving");
+                   //https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + CurLoc + "&destinations=" + str_to + "&mode=driving
+                   new GeoTask(NotificationActivity.this).execute(url);
+               }
             }
         });
 
@@ -186,6 +249,16 @@ public class NotificationActivity extends AppCompatActivity implements GeoTask.G
                 }
             }
         });
+
+        emailButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent emailActivity = new Intent(NotificationActivity.this, SendEmailActivity.class);
+                emailActivity.putExtra("email", emailEdit.getText().toString());
+                startActivity(emailActivity);
+
+            }
+        });
     }
 
     /*public static final String[] EVENT_PROJECTION = new String[]{
@@ -270,11 +343,21 @@ public class NotificationActivity extends AppCompatActivity implements GeoTask.G
 
 
     public void setDouble(String result) {
+
         String res[]=result.split(",");
         Double min=Double.parseDouble(res[0])/60;
         int dist=Integer.parseInt(res[1])/1000;
-        tv_result1.setText("Duration= " + (int) (min / 60) + " hr " + (int) (min % 60) + " mins");
-        tv_result2.setText("Distance= " + dist + " kilometers");
+        String dest_adrs= res[2];
+        /*tv_result1.setText("Duration= " + (int) (min / 60) + " hr " + (int) (min % 60) + " mins");
+        tv_result2.setText("Distance= " + dist + " kilometers");*/
+        //Changes
+        /*System.out.println("Des");
+        locationEdit.setText(dest_adrs, TextView.BufferType.EDITABLE);*/
+        AlertDialog.Builder alert = new AlertDialog.Builder(NotificationActivity.this);
+        alert.setTitle("Info");
+        alert.setMessage("Duration:" + (int) (min / 60) + " hr " + (int) (min % 60) + " mins"+ "\n"+ "Distance: " + dist + " kilometers");
+        alert.setPositiveButton("OK",null);
+        alert.show();
 
     }
 
@@ -350,10 +433,46 @@ public class NotificationActivity extends AppCompatActivity implements GeoTask.G
                 }
                 return;
             }
+            case ALL_PERMISSIONS_RESULT:
+                for (String perms : permissionsToRequest) {
+                    if (!hasPermission(perms)) {
+                        permissionsRejected.add(perms);
+                    }
+                }
+
+                if (permissionsRejected.size() > 0) {
+
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if (shouldShowRequestPermissionRationale(permissionsRejected.get(0))) {
+                            showMessageOKCancel("These permissions are mandatory for the application. Please allow access.",
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                                requestPermissions(permissionsRejected.toArray(new String[permissionsRejected.size()]), ALL_PERMISSIONS_RESULT);
+                                            }
+                                        }
+                                    });
+
+                        }
+                    }
+
+                }
+
 
             // other 'case' lines to check for other
             // permissions this app might request
         }
+    }
+
+    private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
+        new AlertDialog.Builder(NotificationActivity.this)
+                .setMessage(message)
+                .setPositiveButton("OK", okListener)
+                .setNegativeButton("Cancel", null)
+                .create()
+                .show();
     }
 
     public void viewAll()
@@ -399,7 +518,11 @@ public class NotificationActivity extends AppCompatActivity implements GeoTask.G
             String address = addresses.get(0).getAddressLine(0);
             String city = addresses.get(0).getAddressLine(1);
             String country = addresses.get(0).getAddressLine(2);
+            String comma= ",";
+            String currentLocation= address+comma+city+comma+country;
             System.out.println(address + " - " + city + " - " + country);
+            System.out.println(currentLocation);
+            System.out.println(addresses);
             showMessage("Success", "address" + address + " ,City" + city + " ,Country" + country);
             return addresses;
         }
@@ -450,25 +573,9 @@ public class NotificationActivity extends AppCompatActivity implements GeoTask.G
 
 
             HttpURLConnection client=(HttpURLConnection) url.openConnection();
-          //Google Map Distance Matrix API by Srivastava Chintakindi
-            //HttpPost httppost = new HttpPost(url);
-
-/*
-HttpClient client = new DefaultHttpClient();
-HttpResponse response;
-stringBuilder = new StringBuilder();
 
 
-response = client.execute(httppost);
-HttpEntity entity = response.getEntity();
-InputStream stream = entity.getContent();
-int b;
-while ((b = stream.read()) != -1) {
-stringBuilder.append((char) b);
-}
-*/
-        } /*catch (ClientProtocolException e) {
-        }*/ catch (IOException e) {
+        }  catch (IOException e) {
         }
 
         JSONObject jsonObject = new JSONObject();
@@ -496,4 +603,68 @@ stringBuilder.append((char) b);
 
         return dist;
     }
+
+
+    private String getCompleteAddressString(double latitude, double longitude) {
+        String strAdd = "";
+        List<Address> addresses = null;
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+
+        try {
+
+            addresses = geocoder.getFromLocation(latitude, longitude, 1);
+            Log.d("It has come from ","getFromLocation");
+            System.out.println(addresses);
+            if (addresses != null) {
+                Address returnedAddress = addresses.get(0);
+                StringBuilder strReturnedAddress = new StringBuilder("");
+
+                for (int i = 0; i <= returnedAddress.getMaxAddressLineIndex(); i++) {
+                    strReturnedAddress.append(returnedAddress.getAddressLine(i)).append("\n");
+                }
+                strAdd = strReturnedAddress.toString();
+                Log.w("My Current location address", strReturnedAddress.toString());
+            } else {
+                Log.w("My Current location address", "No Address returned!");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.w("My Current location address", "Can't get Address!");
+            Toast.makeText(getApplicationContext(), "Can't Access your location"+ "\n"+ "Please enter it 'From Field' manually" , Toast.LENGTH_LONG).show();
+
+        }
+        return strAdd;
+    }
+
+    private ArrayList<String> findUnAskedPermissions(ArrayList<String> wanted) {
+        ArrayList<String> result = new ArrayList<String>();
+
+        for (String perm : wanted) {
+            if (!hasPermission(perm)) {
+                result.add(perm);
+            }
+        }
+
+        return result;
+    }
+
+    private boolean hasPermission(String permission) {
+        if (canMakeSmores()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                return (checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED);
+            }
+        }
+        return true;
+    }
+
+    private boolean canMakeSmores() {
+        return (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1);
+    }
+
+   /* @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        locationTrack.stopListener();
+    }*/
+
 }

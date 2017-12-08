@@ -51,4 +51,11 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         Cursor res = db.rawQuery("select * from " + TABLE_NAME + " ORDER BY ID DESC", null);
         return res;
     }
+
+    public Cursor getData(int id)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor res = db.rawQuery("select * from " + TABLE_NAME + " where ID="+id+" ORDER BY ID DESC", null);
+        return res;
+    }
 }

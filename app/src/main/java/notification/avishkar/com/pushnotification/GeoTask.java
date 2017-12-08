@@ -2,7 +2,9 @@ package notification.avishkar.com.pushnotification;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
+
 import android.util.Log;
 import android.widget.Toast;
 
@@ -16,6 +18,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+
+import static android.support.v4.content.ContextCompat.startActivity;
+
 
 /**
  * Created by Prateeksha Singh on 11/29/2017.
@@ -41,7 +46,7 @@ public class GeoTask extends AsyncTask<String, Void, String> {
         pd.setCancelable(false);
         pd.show();
     }
-    //This function is executed after the execution of "doInBackground(String...params)" to dismiss the dispalyed progress dialog and call "setDouble(Double)" defined in "MainActivity.java"
+    //This function is executed after the execution of "doInBackground(String...params)" to dismiss the dispalyed progress dialog and call "setDouble(Double)" defined in "NotificationActivity.java"
     @Override
     protected void onPostExecute(String aDouble) {
         super.onPostExecute(aDouble);
@@ -52,7 +57,9 @@ public class GeoTask extends AsyncTask<String, Void, String> {
         }
         else
             Toast.makeText(mContext, "Error4!Please Try Again with proper values", Toast.LENGTH_SHORT).show();
-    }
+
+    } /*Intent i = new Intent(NotificationActivity.this, NotificationActivity.this);
+            startActivity(i);*/
 
     @Override
     protected String doInBackground(String... params) {
@@ -75,6 +82,8 @@ public class GeoTask extends AsyncTask<String, Void, String> {
                 String json=sb.toString();
                 Log.d("JSON",json);
                 JSONObject root=new JSONObject(json);
+                JSONArray dest_adrs=root.getJSONArray("destination_addresses");
+                Log.d("JSON","destination address:"+dest_adrs);
                 JSONArray array_rows=root.getJSONArray("rows");
                 Log.d("JSON","array_rows:"+array_rows);
                 JSONObject object_rows=array_rows.getJSONObject(0);
@@ -86,8 +95,12 @@ public class GeoTask extends AsyncTask<String, Void, String> {
                 JSONObject object_duration=object_elements.getJSONObject("duration");
                 JSONObject object_distance=object_elements.getJSONObject("distance");
 
+
+
+
+
                 Log.d("JSON","object_duration:"+object_duration);
-                return object_duration.getString("value")+","+object_distance.getString("value");
+                return object_duration.getString("value")+","+object_distance.getString("value")+","+dest_adrs;
 
             }
         } catch (MalformedURLException e) {

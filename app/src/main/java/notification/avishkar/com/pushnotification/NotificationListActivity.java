@@ -25,6 +25,8 @@ public class NotificationListActivity extends AppCompatActivity {
     boolean isPushNotificationSaved = false;
     List<HashMap<String, String>> data = new ArrayList<>();
     HashMap<String, String> datum = new HashMap<>();
+    String ID1;
+    int parseInt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,13 +44,13 @@ public class NotificationListActivity extends AppCompatActivity {
         viewAll();
         list = (ListView) findViewById(R.id.list);
         SimpleAdapter adapter = new SimpleAdapter(this, data,
-                R.layout.list_item, new String[]{"title", "subtitle"},
+                R.layout.list_item, new String[]{"Title", "subtitle"},
                 new int[]{R.id.text1, R.id.text2});
         Iterator it = datum.entrySet().iterator();
         while (it.hasNext()) {
             HashMap<String, String> resultMap = new HashMap<>();
             Map.Entry pair = (Map.Entry) it.next();
-            resultMap.put("title", pair.getKey().toString());
+            resultMap.put("Title", pair.getKey().toString());
             resultMap.put("subtitle", pair.getValue().toString());
             data.add(resultMap);
         }
@@ -56,12 +58,18 @@ public class NotificationListActivity extends AppCompatActivity {
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+
                 String Items = String.valueOf(parent.getItemAtPosition(position));
-                Intent intent = new Intent(NotificationListActivity.this, NotificationActivity.class);
-                intent.putExtra("name", "Rakesh Parmar");
-                intent.putExtra("email", "Rakesh.Krashna@Gmail.Com");
-                intent.putExtra("phone", "+91-9922992660");
-                startActivity(intent);
+                System.out.println("Value of Items"+Items);
+
+                String[] split= Items.split(" Title=");
+                ID1= split[1];
+                char ID2= ID1.charAt(0);
+                parseInt= Integer.parseInt(String.valueOf(ID2));
+                System.out.println("ID1:"+ID1.charAt(0));
+
+                fetchdetails();
             }
         });
     }
@@ -74,6 +82,35 @@ public class NotificationListActivity extends AppCompatActivity {
             datum.put(res.getInt(0) + ". " + res.getString(1), res.getString(2));
             res.moveToNext();
         }
+    }
+
+    public void fetchData(){
+
+        mydb = new DatabaseHelper(this);
+        Cursor res = mydb.getAllData();
+        res.moveToFirst();
+        String CNames[] = new String[res.getCount()];
+        for (int i = 0; i < CNames.length; i++) {
+            datum.put(res.getInt(0) + ". " + res.getString(1), res.getString(2));
+            res.moveToNext();
+        }
+
+    }
+
+    public void fetchdetails(){
+
+        mydb = new DatabaseHelper(this);
+        Cursor res = mydb.getData(parseInt);
+        res.moveToFirst();
+        String CNames[] = new String[res.getCount()];
+        for (int i = 0; i < CNames.length; i++) {
+            Intent intent = new Intent(NotificationListActivity.this, NotificationActivity.class);
+            intent.putExtra("name", res.getString(3));
+            intent.putExtra("email", res.getString(4));
+            intent.putExtra("phone", res.getString(5));
+            startActivity(intent);
+        }
+
     }
 
     public void showMessage(String title, String message) {
